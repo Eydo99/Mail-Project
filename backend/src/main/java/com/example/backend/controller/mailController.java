@@ -5,6 +5,7 @@ import com.example.backend.DTOS.mailContentDTO;
 import com.example.backend.Exceptions.UserNotFoundException;
 import com.example.backend.Repo.mailRepo;
 import com.example.backend.model.mail;
+import com.example.backend.service.attachementService;
 import com.example.backend.service.mailService;
 import com.example.backend.DTOS.FilterCriteriaDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,13 +35,16 @@ import java.util.UUID;
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:59007", "http://localhost:65183", "http://localhost:53596"}, allowCredentials = "true")
 public class mailController {
 
+    private final attachementService attachementService;
+
     private final mailService mailService;
     private final mailRepo mailRepo;
 
     @Autowired
-    public mailController(mailService mailService, mailRepo mailRepo) {
+    public mailController(mailService mailService, mailRepo mailRepo,attachementService attachementService) {
         this.mailService = mailService;
         this.mailRepo = mailRepo;
+        this.attachementService =attachementService ;
     }
 
     /**
@@ -221,31 +225,7 @@ public ResponseEntity<Map<String, Object>> composeMail(@RequestBody mailContentD
         }
         // Process attachments - decode base64 and save files
         if (mailContent.getAttachements() != null && !mailContent.getAttachements().isEmpty()) {
-            for (attachementDTO attachment : mailContent.getAttachements()) {
-                try {
-                    // Decode base64 from filePath
-                    byte[] fileBytes = Base64.getDecoder().decode(attachment.getFilePath());
-
-                    // Generate unique filename
-                    String savedFilename = UUID.randomUUID().toString() + "_" + attachment.getFilename();
-
-                    // Save to disk
-                    String uploadDir = "data/uploads/";
-                    File directory = new File(uploadDir);
-                    if (!directory.exists()) {
-                        directory.mkdirs();
-                    }
-
-                    java.nio.file.Path filePath = Paths.get(uploadDir + savedFilename);
-                    Files.write(filePath, fileBytes);
-
-                    // Update filePath to the actual server path
-                    attachment.setFilePath(uploadDir + savedFilename);
-
-                } catch (Exception e) {
-                    System.err.println("Error saving attachment: " + e.getMessage());
-                }
-            }
+            attachementService.ProcessAttachement(mailContent.getAttachements()) ;
         }
 
         
@@ -299,50 +279,18 @@ public ResponseEntity<Map<String, Object>> composeMail(@RequestBody mailContentD
 }
 
     @PostMapping("/draft/save")
-public ResponseEntity<String> saveDraft(@RequestBody mailContentDTO mail,
+public ResponseEntity<String> saveDraft(@RequestBody mailContentDTO mailContent,
                                        HttpServletRequest request) {
     try {
         String loggedInUser = getLoggedInUser(request);
         mailService.setSenderEmail(loggedInUser);
         
-        // Process attachments - decode base64 and save files (SAME AS COMPOSE)
-        if (mail.getAttachements() != null && !mail.getAttachements().isEmpty()) {
-            for (attachementDTO attachment : mail.getAttachements()) {
-                try {
-                    // Skip if already has a file path (not base64)
-                    if (attachment.getFilePath().length() < 500) {
-                        // Already a file path, skip processing
-                        continue;
-                    }
-                    
-                    // Decode base64 from filePath
-                    byte[] fileBytes = Base64.getDecoder().decode(attachment.getFilePath());
-
-                    // Generate unique filename
-                    String savedFilename = UUID.randomUUID().toString() + "_" + attachment.getFilename();
-
-                    // Save to disk
-                    String uploadDir = "data/uploads/";
-                    File directory = new File(uploadDir);
-                    if (!directory.exists()) {
-                        directory.mkdirs();
-                    }
-
-                    java.nio.file.Path filePath = Paths.get(uploadDir + savedFilename);
-                    Files.write(filePath, fileBytes);
-
-                    // Update filePath to the actual server path
-                    attachment.setFilePath(uploadDir + savedFilename);
-                    
-                    System.out.println("✅ Saved attachment: " + savedFilename);
-
-                } catch (Exception e) {
-                    System.err.println("❌ Error saving attachment: " + e.getMessage());
-                }
-            }
+        // Process attachments - decode base64 and save files
+        if (mailContent.getAttachements() != null && !mailContent.getAttachements().isEmpty()) {
+            attachementService.ProcessAttachement(mailContent.getAttachements()) ;
         }
         
-        mailService.saveDraft(mail);
+        mailService.saveDraft(mailContent);
         return ResponseEntity.ok("Email saved to draft successfully");
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
