@@ -285,10 +285,7 @@ public ResponseEntity<String> saveDraft(@RequestBody mailContentDTO mailContent,
         String loggedInUser = getLoggedInUser(request);
         mailService.setSenderEmail(loggedInUser);
         
-        // Process attachments - decode base64 and save files
-        if (mailContent.getAttachements() != null && !mailContent.getAttachements().isEmpty()) {
-            attachementService.ProcessAttachement(mailContent.getAttachements()) ;
-        }
+        
         
         mailService.saveDraft(mailContent);
         return ResponseEntity.ok("Email saved to draft successfully");

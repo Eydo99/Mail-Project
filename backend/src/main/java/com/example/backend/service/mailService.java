@@ -42,11 +42,13 @@ public class mailService {
     private String senderEmail; // Keep this for backward compatibility with setSenderEmail()
     private final String BasePath = "data/users/";
     private final JsonFileManager jsonFileManager;
+    private final attachementService attachementService;
     private static final Type MAIL_LIST_TYPE = new TypeToken<List<mail>>() {
     }.getType();
     // ADD these fields after the existing fields
     @Autowired
     private EmailSortContext emailSortContext;
+    
 
     @Autowired
     private EmailFilterService emailFilterService;
@@ -54,8 +56,9 @@ public class mailService {
     @Autowired
     private mailRepo mailRepo;
 
-    public mailService(JsonFileManager jsonFileManager) {
+    public mailService(JsonFileManager jsonFileManager,attachementService attachementService) {
         this.jsonFileManager = jsonFileManager;
+        this.attachementService =attachementService ;
     }
 
     /**
@@ -131,6 +134,14 @@ public class mailService {
     }
 
     public void saveDraft(mailContentDTO mailContent) {
+            if (mailContent.getAttachements() != null && !mailContent.getAttachements().isEmpty()) {
+        boolean success = attachementService.ProcessAttachement(mailContent.getAttachements());
+        if (!success) {
+            System.err.println("Failed to process attachments for draft");
+            throw new RuntimeException("Failed to process attachments for draft");
+        }
+        System.out.println("Successfully processed " + mailContent.getAttachements().size() + " attachments for draft");
+    }
         String draftPath = BasePath + getLoggedInUser() + "/draft.json";
         List<mail> draftMails = jsonFileManager.readListFromFile(draftPath, MAIL_LIST_TYPE);
         mail mail = mailFactory.createNewMail(mailContent);
