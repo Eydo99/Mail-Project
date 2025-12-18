@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": 277,
+    "to": [
+      "hany@gmail.com"
+    ],
+    "from": "eyadamr1644@gmail.com",
+    "subject": "dafg",
+    "body": "vsd",
+    "preview": "vsd",
+    "starred": false,
+    "hasAttachment": false,
+    "timestamp": "2025-12-18T07:05:43.5339305",
+    "priority": 3,
+    "attachments": []
+  }
+]
