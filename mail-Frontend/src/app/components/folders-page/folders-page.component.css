@@ -1,0 +1,424 @@
+/* folders-page.component.css */
+
+.folders-page {
+  flex: 1;
+  height: calc(100vh - 20px);
+  display: flex;
+  flex-direction: column;
+  background: white;
+  margin: 10px 10px 10px 0;
+  border-radius: 12px;
+  border: 2px solid #234C6A;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 2px solid #E3E3E3;
+  background: #f5f5f5;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1B3C53;
+  margin: 0 0 8px 0;
+}
+
+.page-subtitle {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+
+.new-folder-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #324ae8 0%, #78a8dd 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(50, 74, 232, 0.2);
+}
+
+.new-folder-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(50, 74, 232, 0.3);
+}
+
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  stroke: white;
+}
+
+/* Folders Grid */
+.folders-grid {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  align-content: start;
+}
+
+.folder-card {
+  background: white;
+  border: 2px solid #E3E3E3;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.folder-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: currentColor;
+}
+
+.folder-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.folder-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.folder-icon {
+  width: 28px;
+  height: 28px;
+  stroke: white;
+  stroke-width: 2;
+}
+
+/* Folder Actions - Centered icons */
+.folder-actions {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.folder-card:hover .folder-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f5f5f5;
+  padding: 0; /* Remove any default padding */
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.edit-btn:hover {
+  background: #234C6A;
+}
+
+.edit-btn:hover .action-icon {
+  stroke: white;
+}
+
+.delete-btn:hover {
+  background: #ef4444;
+}
+
+.delete-btn:hover .action-icon {
+  stroke: white;
+}
+
+.action-icon {
+  width: 16px;
+  height: 16px;
+  stroke: #666;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.folder-card-body {
+  flex: 1;
+}
+
+.folder-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1B3C53;
+  margin: 0 0 8px 0;
+}
+
+.folder-description {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.folder-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid #E3E3E3;
+}
+
+/* Email count with fixed mail icon */
+.email-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.mail-icon {
+  width: 18px;
+  height: 18px;
+  stroke: #666;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.view-all-link {
+  font-size: 14px;
+  color: #324ae8;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-all-link:hover {
+  color: #234C6A;
+  text-decoration: underline;
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  stroke: #ddd;
+  margin-bottom: 24px;
+}
+
+.empty-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1B3C53;
+  margin: 0 0 12px 0;
+}
+
+.empty-text {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+.create-first-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #324ae8 0%, #78a8dd 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(50, 74, 232, 0.2);
+}
+
+.create-first-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(50, 74, 232, 0.3);
+}
+
+/* Folder Tips */
+.folder-tips {
+  padding: 24px 32px;
+  background: #FFF9E6;
+  border-top: 2px solid #E3E3E3;
+  display: flex;
+  gap: 16px;
+}
+
+.tips-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.tips-content {
+  flex: 1;
+}
+
+.tips-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #8B4513;
+  margin: 0 0 12px 0;
+}
+
+.tips-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #666;
+}
+
+.tips-list li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tips-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Scrollbar */
+.folders-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.folders-grid::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.folders-grid::-webkit-scrollbar-thumb {
+  background: #456882;
+  border-radius: 4px;
+}
+
+.folders-grid::-webkit-scrollbar-thumb:hover {
+  background: #234C6A;
+}
+
+/* Make sure lucide-icon components are properly centered */
+lucide-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure SVG inside lucide-icon inherits dimensions */
+.mail-icon svg,
+.action-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Auto-refresh indicator */
+.auto-refresh-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 12px;
+  font-size: 12px;
+  color: #10b981;
+  font-weight: 500;
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Updated subtitle to support inline indicator */
+.page-subtitle {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Email count with animation on change */
+.email-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.email-count span {
+  transition: all 0.3s ease;
+}
+
+/* Pulse animation for folder card when count updates */
+@keyframes folder-update {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.folder-card.updating {
+  animation: folder-update 0.5s ease;
+}

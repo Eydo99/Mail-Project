@@ -1,0 +1,124 @@
+/* Signup Animation — CLEAN VERSION */
+.verification-area {
+  width: 380px;
+  height: 240px;
+  position: relative;
+  border-radius: 20px;
+  border: 1px solid rgba(0,255,255,0.12);
+  background: rgba(5, 17, 31, 0.6);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+/* Scanner light bar */
+.scanner-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom,
+    transparent,
+    rgba(0,255,255,0.8),
+    transparent
+  );
+  animation: glowScan 2.8s infinite ease-in-out;
+}
+
+/* Envelope base */
+.envelope {
+  width: 50px;
+  height: 32px;
+  position: absolute;
+  top: 48%;
+  left: -80px;
+  background: transparent;
+  border: 2px solid rgba(0,255,255,0.45);
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(0,255,255,0.35);
+  animation: moveEnvelope 4s infinite cubic-bezier(.48,.04,.5,1);
+}
+
+.envelope::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 58%);
+  background: rgba(0,255,255,0.3);
+}
+
+/* Stagger envelope timing */
+.envelope.delay-1 { animation-delay: 1.2s; }
+.envelope.delay-2 { animation-delay: 2.4s; }
+
+/* Verified Box */
+.verified-box {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 120px;
+  height: 95px;
+  border-radius: 12px;
+  border: 2px solid rgba(0,255,200,0.45);
+  color: rgba(0,255,200,0.85);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Keyframes */
+@keyframes moveEnvelope {
+  0%   { transform: translateX(0px) translateY(0px); opacity: 0; }
+  15%  { opacity: 1; }
+  45%  { transform: translateX(150px) translateY(-7px); }
+  70%  { transform: translateX(260px) translateY(-7px); opacity: 1; }
+  100% { transform: translateX(380px) translateY(0px); opacity: 0; }
+}
+
+@keyframes glowScan {
+  0%,100% { opacity: 0.3; }
+  50% { opacity: 1; box-shadow: 0 0 20px rgba(0,255,255,0.8); }
+}
+.input {
+  width: 100%;
+  background: #0A1B2F;
+  padding: 12px 16px;
+  margin-top: 4px;
+  border-radius: 12px;
+  outline: none;
+  color: white;
+  border: 1px solid transparent;
+}
+
+.input:focus {
+  border-color: #18E2D5;
+}
+
+.error-text {
+  color: #ff6b6b;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(to right, #18E2D5, #0FD7B6);
+  padding: 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #0A1B2F;
+  margin-top: 10px;
+}
+
+.loader-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #0A1B2F;
+  border-top-color: #18E2D5;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

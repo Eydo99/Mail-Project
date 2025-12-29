@@ -1,0 +1,79 @@
+<div class="pagination-container" *ngIf="totalItems > 0">
+  <div class="pagination-info">
+    <span class="items-info">
+      Showing {{ startItem }} - {{ endItem }} of {{ totalItems }}
+    </span>
+
+    <div class="items-per-page">
+      <label for="itemsPerPage">Items per page:</label>
+      <select
+        id="itemsPerPage"
+        [value]="itemsPerPage"
+        (change)="onItemsPerPageChange(+$any($event.target).value)"
+        class="items-select"
+      >
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="15">15</option>
+        <option [value]="20">20</option>
+
+      </select>
+    </div>
+  </div>
+
+  <div class="pagination-controls">
+    <!-- Previous Button -->
+    <button
+      class="pagination-btn"
+      [disabled]="!hasPreviousPage"
+      (click)="goToPreviousPage()"
+      title="Previous"
+    >
+      Previous
+    </button>
+
+    <!-- First Page -->
+    <button
+      *ngIf="showFirstPage"
+      class="pagination-btn page-number"
+      (click)="goToFirstPage()"
+    >
+      1
+    </button>
+
+    <!-- Ellipsis before -->
+    <span *ngIf="showFirstPage" class="ellipsis">...</span>
+
+    <!-- Page Numbers -->
+    <button
+      *ngFor="let page of visiblePages"
+      class="pagination-btn page-number"
+      [class.active]="page === currentPage"
+      (click)="goToPage(page)"
+    >
+      {{ page }}
+    </button>
+
+    <!-- Ellipsis after -->
+    <span *ngIf="showLastPage" class="ellipsis">...</span>
+
+    <!-- Last Page -->
+    <button
+      *ngIf="showLastPage"
+      class="pagination-btn page-number"
+      (click)="goToLastPage()"
+    >
+      {{ totalPages }}
+    </button>
+
+    <!-- Next Button -->
+    <button
+      class="pagination-btn"
+      [disabled]="!hasNextPage"
+      (click)="goToNextPage()"
+      title="Next"
+    >
+      Next
+    </button>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">{{ mode === 'create' ? 'Create New Folder' : 'Edit Folder' }}</h2>
+      <button class="close-btn" (click)="onClose()">
+        <lucide-icon [img]="X" class="close-icon"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Folder Name *</label>
+        <input
+          type="text"
+          class="form-input"
+          [(ngModel)]="folderData.name"
+          placeholder="e.g., Client Projects"
+          maxlength="50"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea
+          class="form-textarea"
+          [(ngModel)]="folderData.description"
+          placeholder="Add a description for this folder..."
+          rows="3"
+          maxlength="200"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Folder Color</label>
+        <div class="color-picker">
+          <button
+            *ngFor="let color of availableColors"
+            class="color-option"
+            [class.selected]="folderData.color === color"
+            [style.background]="color"
+            (click)="selectColor(color)"
+          ></button>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" (click)="onClose()">
+          Cancel
+        </button>
+
+        <div class="right-actions">
+          <button
+            *ngIf="mode === 'edit'"
+            class="btn btn-danger"
+            (click)="onDelete()"
+          >
+            <lucide-icon [img]="Trash2" class="btn-icon"></lucide-icon>
+            Delete
+          </button>
+
+          <button
+            class="btn btn-primary"
+            (click)="onSave()"
+            [disabled]="!isValid()"
+          >
+            <lucide-icon [img]="Save" class="btn-icon"></lucide-icon>
+            {{ mode === 'create' ? 'Create' : 'Save' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

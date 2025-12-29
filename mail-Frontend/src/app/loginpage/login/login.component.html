@@ -1,0 +1,150 @@
+<!-- src/app/loginpage/login/login.component.html -->
+<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
+  <div class="w-full max-w-6xl flex flex-col md:flex-row gap-10 items-center">
+    <!-- LEFT: LOGIN CARD -->
+    <section
+      class="w-full md:w-1/2 bg-[#0E2A47]/90 border border-cyan-500/40 rounded-3xl shadow-2xl shadow-cyan-900/60 backdrop-blur-xl px-8 py-10 md:px-10 md:py-12 login-card"
+    >
+      <div class="space-y-6">
+        <header class="space-y-2">
+          <h1 class="text-3xl md:text-4xl font-semibold text-white tracking-wide">
+            Welcome Back
+          </h1>
+          <p class="text-sm text-cyan-300/80">
+            Secure. Encrypted. The future of mail.
+          </p>
+        </header>
+
+        <!-- Toggle (login / create account) -->
+        <div class="bg-slate-900/80 rounded-full p-1 flex items-center text-sm">
+          <button
+            class="flex-1 rounded-full py-2 text-center text-white bg-gradient-to-r from-cyan-500 to-teal-400 shadow-lg shadow-cyan-700/50 transition-all"
+          >
+            Login
+          </button>
+          <a
+            routerLink="/signup"
+            class="flex-1 rounded-full py-2 text-center text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all"
+          >
+            Create Account
+          </a>
+        </div>
+
+        <!-- FORM -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+          <!-- Email -->
+          <div class="space-y-1">
+            <label class="block text-sm text-slate-200">Email</label>
+            <div
+              class="flex items-center gap-3 bg-slate-900/80 rounded-full px-4 py-3 ring-1 ring-slate-700/70 focus-within:ring-cyan-400/80 transition-all"
+            >
+              <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/15">
+                <i class="fa-regular fa-envelope text-cyan-300"></i>
+              </span>
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email address"
+                class="w-full bg-transparent outline-none text-sm text-slate-100 placeholder:text-slate-500"
+              />
+            </div>
+            <p *ngIf="email?.touched && email?.invalid" class="text-xs text-red-400 pl-2">
+              Please enter a valid email address.
+            </p>
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-1">
+            <label class="block text-sm text-slate-200">Password</label>
+            <div
+              class="flex items-center gap-3 bg-slate-900/80 rounded-full px-4 py-3 ring-1 ring-slate-700/70 focus-within:ring-cyan-400/80 transition-all"
+            >
+              <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/15">
+                <i class="fa-solid fa-lock text-cyan-300"></i>
+              </span>
+              <input
+                type="password"
+                formControlName="password"
+                placeholder="Enter your password"
+                class="w-full bg-transparent outline-none text-sm text-slate-100 placeholder:text-slate-500"
+              />
+            </div>
+            <p *ngIf="password?.touched && password?.hasError('minlength')" class="text-xs text-red-400 pl-2">
+              Password must be at least 8 characters.
+            </p>
+          </div>
+
+          <!-- Error message from backend -->
+          <p *ngIf="serverError" class="text-xs text-red-400">
+            {{ serverError }}
+          </p>
+
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span></span>
+            <a href="#" class="hover:text-cyan-300 transition-colors">
+              Forgot password?
+            </a>
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="mt-2 w-full rounded-full py-3 text-sm font-medium text-slate-900 bg-gradient-to-r from-cyan-400 to-teal-300 hover:from-cyan-300 hover:to-teal-200 disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-lg shadow-cyan-700/40 login-button"
+          >
+            <span *ngIf="!isLoading">Sign in</span>
+            <span *ngIf="isLoading" class="flex items-center justify-center gap-2">
+              <span class="loader-dot"></span>
+              Signing in...
+            </span>
+          </button>
+        </form>
+
+        <p class="pt-2 text-xs text-slate-400 text-center">
+          By continuing, you agree to our <span class="text-cyan-300">Terms</span> and
+          <span class="text-cyan-300">Privacy Policy</span>.
+        </p>
+      </div>
+    </section>
+
+    <!-- RIGHT: ENVELOPE ANIMATION -->
+    <section class="hidden md:flex w-full md:w-1/2 items-center justify-center">
+      <div class="relative w-full max-w-md aspect-[4/3] envelope-scene">
+        <!-- Background glow -->
+        <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/10 via-teal-400/5 to-purple-500/10 blur-3xl"></div>
+
+        <!-- Envelope path / trail -->
+        <div class="absolute inset-4 rounded-3xl border border-cyan-500/30/30 bg-slate-900/40 backdrop-blur-xl overflow-hidden flex items-center justify-center">
+          <!-- floating mail icons -->
+          <div class="absolute -left-6 top-6 w-10 h-10 rounded-full border border-cyan-500/40 flex items-center justify-center text-cyan-300 icon-float">
+            ✉
+          </div>
+          <div class="absolute right-4 bottom-8 w-9 h-9 rounded-full border border-teal-400/40 flex items-center justify-center text-teal-300 icon-float delay-150">
+            📬
+          </div>
+
+          <!-- Envelope + message -->
+          <div class="relative w-40 h-28 envelope-fly">
+            <!-- envelope body -->
+            <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-cyan-400/60 shadow-lg shadow-cyan-900/80">
+              <div class="absolute inset-x-1 top-1 h-1/2 bg-gradient-to-b from-slate-900/0 to-slate-900/60"></div>
+            </div>
+            <!-- flap -->
+            <div class="absolute inset-0 envelope-flap"></div>
+            <!-- message -->
+            <div class="absolute left-3 right-3 top-3 h-10 rounded-md bg-cyan-300/90 text-slate-900 text-[10px] flex items-center justify-center message-slide">
+              Encrypted mail
+            </div>
+          </div>
+
+          <!-- mailbox -->
+          <div class="absolute right-10 bottom-6 w-16 h-20 mailbox">
+            <div class="w-full h-3/4 rounded-t-2xl bg-gradient-to-b from-slate-800 to-slate-950 border border-teal-400/60"></div>
+            <div class="w-10 h-1.5 bg-teal-400/80 mx-auto mt-1 rounded-full glow-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+

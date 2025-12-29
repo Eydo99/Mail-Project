@@ -1,0 +1,120 @@
+<!-- Modal Overlay -->
+<div class="compose-overlay" (click)="onClose()">
+
+  <!-- Modal Content -->
+  <div class="compose-modal" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="compose-header">
+      <h2 class="compose-title">
+        <h2 class="compose-title">
+          {{ isEditDraftMode ? 'Edit Draft' : isDraftMode ? 'Send Draft' : isReplyMode ? 'Reply' : isForwardMode ?
+          'Forward' : 'New Message' }}
+        </h2>
+      </h2>
+      <button class="close-btn" (click)="onClose()" aria-label="Close" [disabled]="isLoading">
+        ✕
+      </button>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div class="message-container" *ngIf="successMessage || errorMessage">
+      <div class="alert alert-success" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+      <div class="alert alert-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="compose-body">
+      <div class="form-group">
+        <label for="to">To:</label>
+        <input type="text" id="to" [(ngModel)]="to" [readonly]="isReplyMode" [class.readonly-input]="isReplyMode"
+          placeholder="recipient@example.com (separate multiple emails with commas)" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" [(ngModel)]="subject" [readonly]="isForwardMode || isDraftMode"
+          [class.readonly-input]="isForwardMode || isDraftMode" placeholder="Email subject" class="form-input">
+      </div>
+
+      <!-- Priority Dropdown -->
+      <!-- Priority Dropdown -->
+      <div class="form-group">
+        <label for="priority">Priority:</label>
+        <select id="priority" [(ngModel)]="priority" [disabled]="isForwardMode || isDraftMode"
+          [class.readonly-input]="isForwardMode || isDraftMode" class="form-select">
+          <option value="low">🟢 Low</option>
+          <option value="normal" selected>🟡 Normal</option>
+          <option value="high">🟠 High</option>
+          <option value="urgent">🔴 Urgent</option>
+        </select>
+      </div>
+
+     <!-- Attachments Section -->
+<div class="form-group">
+  <label>Attachments:</label>
+  <div class="attachment-section">
+
+    <!-- Existing Attachments (from draft) -->
+    <div class="attachments-list" *ngIf="existingAttachments.length > 0">
+      <div class="attachment-item" *ngFor="let attachment of existingAttachments; let i = index" style="background: #e8f5e9;">
+        <span class="attachment-name">📎 {{ attachment.filename }}</span>
+        <span class="attachment-size">({{ (attachment.fileSize / 1024).toFixed(1) }} KB)</span>
+        <button type="button" class="btn-remove" (click)="removeExistingAttachment(i)"
+                [disabled]="isForwardMode || isDraftMode"
+                aria-label="Remove attachment">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- New Attachments -->
+    <input type="file" id="file-input" (change)="onFileSelect($event)" multiple style="display: none;">
+    <button type="button" class="btn-attach"
+            [disabled]="isForwardMode || isDraftMode"
+            onclick="document.getElementById('file-input').click()">
+      📎 Add Attachments
+    </button>
+    <!-- Show newly selected files -->
+    <div class="attachments-list" *ngIf="attachments.length > 0">
+      <div class="attachment-item" *ngFor="let file of attachments; let i = index">
+        <span class="attachment-name">{{ file.name }}</span>
+        <span class="attachment-size">({{ (file.size / 1024).toFixed(1) }} KB)</span>
+        <button type="button" class="btn-remove" (click)="removeAttachment(i)" aria-label="Remove attachment">
+          ✕
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="form-group form-group-body">
+        <label for="body">Message:</label>
+        <textarea id="body" [(ngModel)]="body" [readonly]="isForwardMode || isDraftMode"
+          [class.readonly-input]="isForwardMode || isDraftMode" placeholder="Write your message here..."
+          class="form-textarea" rows="10"></textarea>
+      </div>
+
+      <!-- Footer -->
+      <div class="compose-footer">
+        <button class="btn btn-cancel" (click)="onClose()" [disabled]="isLoading">
+          Cancel
+        </button>
+        <button class="btn btn-draft" (click)="onSaveDraft()" [disabled]="isLoading" *ngIf="!isDraftMode">
+          <span *ngIf="!isLoading">{{ isEditDraftMode ? 'Update Draft' : 'Save as Draft' }}</span>
+          <span *ngIf="isLoading">Saving...</span>
+        </button>
+        <button class="btn btn-send" (click)="onSend()" [disabled]="isLoading">
+          <span *ngIf="!isLoading">
+            {{ isEditDraftMode ? 'Send Email' : isDraftMode ? 'Send Email' : isReplyMode ? 'Send Reply' : isForwardMode
+            ? 'Forward' : 'Send' }}
+          </span>
+          <span *ngIf="isLoading">Sending...</span>
+        </button>
+
+      </div>
+    </div>

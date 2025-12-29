@@ -1,0 +1,106 @@
+<div class="min-h-screen bg-[#0B182B] flex items-center justify-center px-4">
+  <div class="w-full max-w-6xl flex flex-col md:flex-row gap-10 items-center">
+
+    <!-- SIGNUP FORM -->
+    <section class="w-full md:w-1/2 bg-[#0E2A47]/90 rounded-3xl shadow-2xl shadow-cyan-900/60 border border-cyan-500/40 p-10 signup-card">
+
+      <h1 class="text-3xl font-semibold text-white mb-2">Create Account</h1>
+      <p class="text-sm text-cyan-300/80 mb-6">Join our Mail System</p>
+
+      <!-- Toggle Tabs -->
+      <div class="bg-slate-900/80 flex p-1 rounded-full text-sm mb-6">
+        <a routerLink="/login"
+           class="flex-1 py-2 text-center text-slate-300 hover:bg-slate-800/60 rounded-full transition">
+          Login
+        </a>
+        <button class="flex-1 py-2 text-center rounded-full text-white bg-gradient-to-r from-cyan-500 to-teal-400">
+          Create
+        </button>
+      </div>
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+        <!-- Full Name -->
+        <div>
+          <label class="text-slate-200 text-sm">Full Name</label>
+          <input formControlName="name" class="input" placeholder="Hany Ayman" />
+          <p *ngIf="f.name.touched && f.name.hasError('required')" class="error-text">Name required.</p>
+          <p *ngIf="f.name.touched && f.name.hasError('minlength')" class="error-text">Minimum 3 chars.</p>
+          <p *ngIf="f.name.touched && f.name.hasError('pattern')" class="error-text">Letters only.</p>
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label class="text-slate-200 text-sm">Phone</label>
+          <input formControlName="phoneNumber" class="input" placeholder="01xxxxxxxxx" />
+          <p *ngIf="f.phoneNumber.touched && f.phoneNumber.hasError('pattern')" class="error-text">
+            Invalid phone format (Egypt only).
+          </p>
+        </div>
+
+        <!-- Birthdate -->
+        <div>
+          <label class="text-slate-200 text-sm">Birthdate</label>
+          <input type="date" formControlName="birthDate" class="input" />
+          <p *ngIf="f.birthDate.touched && f.birthDate.hasError('required')" class="error-text">
+            Birthdate required.
+          </p>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="text-slate-200 text-sm">Email</label>
+          <input type="email" formControlName="email" class="input" placeholder="you@gmail.com" />
+          <p *ngIf="f.email.touched && f.email.hasError('email')" class="error-text">Invalid email format.</p>
+          <p *ngIf="f.email.touched && f.email.hasError('pattern')" class="error-text">
+            Gmail only allowed.
+          </p>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="text-slate-200 text-sm">Password</label>
+          <input type="password" formControlName="password" class="input" placeholder="Ac872@m_" />
+          <p *ngIf="f.password.touched && f.password.hasError('minlength')" class="error-text">
+            Min 8 characters.
+          </p>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label class="text-slate-200 text-sm">Confirm Password</label>
+          <input type="password" formControlName="confirmPassword" class="input" />
+          <p *ngIf="passwordMismatch" class="error-text">Passwords do not match.</p>
+        </div>
+
+        <p *ngIf="serverError" class="error-text">{{ serverError }}</p>
+
+        <button type="submit" class="submit-btn" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading" class="flex justify-center gap-2">
+            <span class="loader-dot"></span>
+            Creating...
+          </span>
+        </button>
+
+      </form>
+    </section>
+
+    <!-- Right side animation -->
+    <section class="hidden md:flex w-full md:w-1/2 justify-center items-center">
+      <div class="verification-area signup-anim">
+        <div class="scanner-line"></div>
+        <div class="verify-bar"></div>
+
+        <!-- ✉ Animated Envelopes -->
+        <div class="envelope delay-1"></div>
+        <div class="envelope delay-2"></div>
+        <div class="envelope"></div>
+
+        <!-- Verified box -->
+        <div class="verified-box">✔ Verified</div>
+      </div>
+    </section>
+
+  </div>
+</div>

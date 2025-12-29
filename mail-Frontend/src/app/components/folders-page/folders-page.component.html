@@ -1,0 +1,84 @@
+<div class="folders-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Custom Folders</h1>
+      <p class="page-subtitle">
+        Organize your emails with custom folders
+        <span class="auto-refresh-indicator">● Auto-updating</span>
+      </p>
+    </div>
+    <button class="new-folder-btn" (click)="openCreateFolder()">
+      <lucide-icon [img]="Plus" class="btn-icon"></lucide-icon>
+      <span>New Folder</span>
+    </button>
+  </div>
+
+  <!-- Folders Grid -->
+  <div class="folders-grid">
+    <div
+      *ngFor="let folder of folders"
+      class="folder-card"
+      [style.border-color]="folder.color"
+      (click)="viewFolder(folder)"
+    >
+      <div class="folder-card-header">
+        <div class="folder-icon-wrapper" [style.background]="folder.color">
+          <lucide-icon [img]="FolderIcon" class="folder-icon"></lucide-icon>
+        </div>
+        <div class="folder-actions">
+          <button
+            class="action-btn edit-btn"
+            (click)="editFolder($event, folder)"
+            title="Edit folder"
+          >
+            <lucide-icon [img]="Edit" class="action-icon"></lucide-icon>
+          </button>
+          <button
+            class="action-btn delete-btn"
+            (click)="deleteFolder($event, folder)"
+            title="Delete folder"
+          >
+            <lucide-icon [img]="Trash2" class="action-icon"></lucide-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="folder-card-body">
+        <h3 class="folder-name">{{ folder.name }}</h3>
+        <p class="folder-description" *ngIf="folder.description">
+          {{ folder.description }}
+        </p>
+      </div>
+
+      <div class="folder-card-footer">
+        <div class="email-count">
+          <lucide-icon [img]="Mail" class="mail-icon"></lucide-icon>
+          <span>{{ folder.emailCount || 0 }} emails</span>
+        </div>
+        <button class="view-all-link">View All</button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="folders.length === 0">
+      <lucide-icon [img]="FolderIcon" class="empty-icon"></lucide-icon>
+      <h3 class="empty-title">No folders yet</h3>
+      <p class="empty-text">Create your first folder to organize your emails</p>
+      <button class="create-first-btn" (click)="openCreateFolder()">
+        <lucide-icon [img]="Plus" class="btn-icon"></lucide-icon>
+        Create Your First Folder
+      </button>
+    </div>
+  </div>
+
+  <!-- Folder Modal -->
+  <app-folder-modal
+    *ngIf="showFolderModal"
+    [folder]="selectedFolder"
+    [mode]="folderModalMode"
+    (save)="onFolderSave($event)"
+    (delete)="onFolderDelete($event)"
+    (close)="closeFolderModal()"
+  ></app-folder-modal>
+</div>

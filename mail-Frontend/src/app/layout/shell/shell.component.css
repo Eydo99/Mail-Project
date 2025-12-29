@@ -1,0 +1,27 @@
+/* shell.component.css */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: #dfeefd;
+  overflow: hidden; /* Prevents scrollbars on the body */
+}
+
+/* The Sidebar (app-sidebar) usually has its own width.
+   We don't need to touch it here if it works. */
+
+/* Main Content Area (Holds the Inbox) */
+.main-content {
+  flex: 1; /* Takes up all remaining space */
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Critical: allows flex container to shrink below content size */
+  height: 100%;
+  transition: flex 0.3s ease; /* Smooth transition when reader opens */
+}
+
+/* Ensure the router-outlet content fills the main-content */
+.main-content > * {
+  width: 100%;
+  height: 100%;
+}

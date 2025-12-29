@@ -1,0 +1,195 @@
+<div class="contacts-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Contacts</h1>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button class="btn-add" (click)="openAddModal()">+ Add Contact</button>
+    
+    <div class="search-box">
+      <input 
+        type="text" 
+        placeholder="Search contacts..." 
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        class="search-input"
+      />
+    </div>
+
+    <div class="sort-dropdown">
+      <label for="sortBy">Sort by:</label>
+      <select id="sortBy" [(ngModel)]="sortBy" (change)="onSort()">
+        <option value="name">Name</option>
+        <option value="email">Email</option>
+      </select>
+    </div>
+  </div>
+
+<!-- Contacts List -->
+  <div class="contacts-list">
+    <div 
+      *ngFor="let contact of contacts" 
+      class="contact-item"
+    >
+      <div class="contact-avatar" [style.background-color]="contact.avatarColor">
+        {{ contact.initials }}
+      </div>
+      
+      <div class="contact-info">
+        <div class="contact-name">{{ contact.name }}</div>
+        <div class="contact-emails">
+          <div *ngFor="let email of contact.emails" class="email-item">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink: 0;">
+              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+            </svg>
+            {{ email.address }}
+            <span *ngIf="email.isPrimary" class="primary-badge">Primary</span>
+          </div>
+        </div>
+        <div class="contact-phones">
+          <div *ngFor="let phone of contact.phones" class="phone-item">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink: 0;">
+              <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+            </svg>
+            {{ phone.number }}
+            <span *ngIf="phone.isPrimary" class="primary-badge">Primary</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-actions">
+        <button class="btn-icon" (click)="openEditModal(contact)" title="Edit">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+          </svg>
+        </button>
+        <button class="btn-icon btn-delete" (click)="deleteContact(contact)" title="Delete">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="contacts.length === 0 && totalItems === 0" class="no-contacts">
+      No contacts found
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalItems]="totalItems"
+    [itemsPerPage]="itemsPerPage"
+    (pageChange)="onPageChange($event)"
+    (itemsPerPageChange)="onItemsPerPageChange($event)"
+  ></app-pagination>
+
+  <!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ modalMode === 'add' ? 'Add Contact' : 'Edit Contact' }}</h2>
+      <button class="btn-close" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="contactName">Name <span class="required">*</span></label>
+        <input 
+          id="contactName"
+          type="text" 
+          [(ngModel)]="formName" 
+          placeholder="Enter contact name"
+          class="form-input"
+          [class.error]="validationErrors.name"
+        />
+        <div class="error-message" *ngIf="validationErrors.name">
+          {{ validationErrors.name }}
+        </div>
+      </div>
+
+      <!-- Email Addresses -->
+      <div class="form-group">
+        <label>Email Addresses <span class="required">*</span></label>
+        <div *ngFor="let email of formEmails; let i = index" class="email-field-group">
+          <input 
+            type="email" 
+            [(ngModel)]="email.address" 
+            placeholder="Enter email address"
+            class="form-input email-input"
+            [class.error]="validationErrors.emails && validationErrors.emails[i]"
+          />
+          <label class="primary-checkbox">
+            <input 
+              type="radio" 
+              [name]="'primary'" 
+              [checked]="email.isPrimary"
+              (change)="setPrimaryEmail(i)"
+            />
+            Primary
+          </label>
+          <button 
+            *ngIf="formEmails.length > 1"
+            class="btn-remove" 
+            (click)="removeEmailField(i)"
+            title="Remove email"
+          >
+            &times;
+          </button>
+          <div class="error-message" *ngIf="validationErrors.emails && validationErrors.emails[i]">
+            {{ validationErrors.emails[i] }}
+          </div>
+        </div>
+        <button class="btn-add-email" (click)="addEmailField()">+ Add Email</button>
+      </div>
+
+      <!-- Phone Numbers -->
+      <div class="form-group">
+        <label>Phone Numbers</label>
+        <div *ngFor="let phone of formPhones; let i = index" class="email-field-group">
+          <input 
+            type="tel" 
+            [(ngModel)]="phone.number" 
+            placeholder="Enter phone number"
+            class="form-input email-input"
+            [class.error]="validationErrors.phones && validationErrors.phones[i]"
+          />
+          <label class="primary-checkbox">
+            <input 
+              type="radio" 
+              [name]="'primaryPhone'" 
+              [checked]="phone.isPrimary"
+              (change)="setPrimaryPhone(i)"
+            />
+            Primary
+          </label>
+          <button 
+            *ngIf="formPhones.length > 1"
+            class="btn-remove" 
+            (click)="removePhoneField(i)"
+            title="Remove phone"
+          >
+            &times;
+          </button>
+          <div class="error-message" *ngIf="validationErrors.phones && validationErrors.phones[i]">
+            {{ validationErrors.phones[i] }}
+          </div>
+        </div>
+        <button class="btn-add-email" (click)="addPhoneField()">+ Add Phone</button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModal()">Cancel</button>
+      <button class="btn-primary" (click)="saveContact()">
+        {{ modalMode === 'add' ? 'Add Contact' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,98 @@
+<aside class="reader-panel" [class.open]="isOpen">
+  <div *ngIf="selectedEmail" class="reader-content">
+    <!-- Header -->
+    <div class="reader-header">
+      <button class="close-btn" (click)="closeReader()">
+        <img src="assets/icons/close.png" alt="Close" class="icon" />
+      </button>
+
+      <div class="action-buttons">
+        <!-- Navigation buttons -->
+        <button class="action-btn nav-btn" (click)="onPreviousEmail()" [disabled]="!canGoPrevious"
+          title="Previous email">
+          <span class="nav-icon">←</span>
+        </button>
+
+        <div class="email-counter">
+          {{ currentIndex + 1 }} / {{ totalEmails }}
+        </div>
+
+        <button class="action-btn nav-btn" (click)="onNextEmail()" [disabled]="!canGoNext" title="Next email">
+          <span class="nav-icon">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Email Details -->
+    <div class="reader-body">
+      <h2 class="email-subject">{{ selectedEmail.subject }}</h2>
+
+      <div class="sender-info">
+        <div class="sender-avatar">
+          {{ selectedEmail.sender.charAt(0).toUpperCase() }}
+        </div>
+        <div class="sender-details">
+          <div class="sender-name">{{ selectedEmail.sender }}</div>
+          <div class="sender-email">{{ selectedEmail.senderEmail }}</div>
+        </div>
+        <div class="email-timestamp">
+          {{ selectedEmail.timestamp | date:'medium' }}
+        </div>
+      </div>
+
+      <!-- Email Body -->
+      <div class="email-body">
+        <p>{{ selectedEmail.body }}</p>
+
+        <p>Best regards,<br />{{ selectedEmail.sender }}</p>
+      </div>
+
+      <!-- Attachments (if any) -->
+      <div *ngIf="selectedEmail.attachments && selectedEmail.attachments.length > 0" class="attachments">
+        <div class="attachment-label">
+          Attachments ({{ selectedEmail.attachments.length }})
+        </div>
+
+        <div *ngFor="let attachment of selectedEmail.attachments" class="attachment-item">
+          <img src="assets/icons/pdf-file.png" alt="File" class="attachment-icon" />
+          <div class="attachment-info">
+            <span class="attachment-name">{{ attachment.filename }}</span>
+            <span class="attachment-size">{{ formatFileSize(attachment.fileSize) }}</span>
+          </div>
+          <div class="attachment-actions">
+            <button class="attachment-btn view-btn" (click)="onViewAttachment(attachment)" title="View">
+              <img src="assets/icons/search.png" alt="View" class="btn-icon" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="reader-footer">
+      <ng-container *ngIf="isDraft; else normalActions">
+        <button class="forward-btn" (click)="onEditDraft()">
+          ✏️ Edit Draft
+        </button>
+        <button class="reply-btn send-draft-btn" (click)="onSendDraft()">
+          📤 Send Email
+        </button>
+      </ng-container>
+
+      <ng-template #normalActions>
+        <button class="reply-btn" (click)="onReply()">
+          Reply
+        </button>
+        <button class="forward-btn" (click)="onForward()">
+          Forward
+        </button>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!selectedEmail" class="empty-state">
+    <img src="assets/icons/mail-open.png" alt="No email" class="empty-icon" />
+    <p class="empty-text">Select an email to read</p>
+  </div>
+</aside>

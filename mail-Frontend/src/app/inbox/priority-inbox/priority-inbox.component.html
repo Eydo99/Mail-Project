@@ -1,0 +1,96 @@
+<div class="inbox-container">
+  <!-- Action Bar (appears when emails are selected) -->
+
+
+  <!-- Header -->
+  <div class="inbox-header">
+    <h1 class="inbox-title">
+      {{ title }}
+      <span class="auto-refresh-indicator" *ngIf="isAutoRefreshing">● Auto-updating</span>
+    </h1>
+
+  </div>
+
+  <!-- Email List with Priority Sections -->
+  <div class="email-list">
+    <!-- Loop through each priority section -->
+    <div *ngFor="let section of prioritySections" class="priority-section">
+      <!-- Section Header -->
+      <div class="section-header" (click)="toggleSection(section)" [style.border-left-color]="section.color">
+        <div class="section-header-left">
+          <lucide-icon
+            [img]="AlertCircle"
+            class="section-icon"
+            [style.color]="section.color"
+          ></lucide-icon>
+          <span class="section-title" [style.color]="section.color">{{ section.title }}</span>
+          <span class="section-count">({{ getSectionCount(section) }})</span>
+        </div>
+        <lucide-icon
+          [img]="section.expanded ? ChevronDown : ChevronRight"
+          class="expand-icon"
+        ></lucide-icon>
+      </div>
+
+      <!-- Section Emails (shown when expanded) -->
+      <div class="section-emails" *ngIf="section.expanded">
+        <div
+          *ngFor="let email of section.emails"
+          class="email-item"
+          [class.selected]="email.id === selectedEmailId"
+          [class.checkbox-selected]="isEmailSelected(email.id)"
+          (click)="onEmailClick(email)"
+        >
+
+
+          <div class="email-content">
+            <div class="email-header">
+              <span class="email-sender">{{ email.sender }}</span>
+
+              <svg
+                class="icon star-icon"
+                [class.starred]="email.isStarred"
+                (click)="toggleStar($event, email)"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                  [attr.fill]="email.isStarred ? '#fbbf24' : 'none'"
+                  [attr.stroke]="email.isStarred ? '#f59e0b' : '#9ca3af'"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+
+              <!-- Attachment Icon -->
+              <lucide-icon
+                *ngIf="email.hasAttachment"
+                [img]="Paperclip"
+                class="icon attachment-icon"
+              ></lucide-icon>
+
+              <!-- Priority Badge -->
+              <span class="priority-badge" [style.background-color]="section.color">
+                P{{ email.priority }}
+              </span>
+            </div>
+
+            <div class="email-subject">{{ email.subject }}</div>
+            <div class="email-preview">{{ email.preview }}</div>
+          </div>
+
+          <div class="email-time">
+            {{ email.timestamp | date:'shortTime' }}
+          </div>
+        </div>
+
+        <!-- Empty state for section -->
+        <div *ngIf="section.emails.length === 0" class="section-empty">
+          <p>No {{ section.title.toLowerCase() }} emails</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

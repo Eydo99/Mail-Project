@@ -1,0 +1,209 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <lucide-icon [img]="Mail" class="title-icon"></lucide-icon>
+        Filter Emails
+      </h2>
+      <button class="close-btn" (click)="onClose()">
+        <lucide-icon [img]="X" class="close-icon"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- General Search -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="Mail" class="label-icon"></lucide-icon>
+          General Search
+        </label>
+        <input
+          type="text"
+          class="filter-input"
+          placeholder="Search in subject, body, sender..."
+          [(ngModel)]="searchTerm"
+        />
+        <p class="filter-hint">Searches across subject, body, sender, and receiver</p>
+      </div>
+
+      <!-- Date Range -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="Calendar" class="label-icon"></lucide-icon>
+          Date Range
+        </label>
+        <div class="date-range-group">
+          <div class="date-input-group">
+            <label class="sub-label">From</label>
+            <input
+              type="date"
+              class="filter-input"
+              [(ngModel)]="dateFrom"
+            />
+          </div>
+          <div class="date-input-group">
+            <label class="sub-label">To</label>
+            <input
+              type="date"
+              class="filter-input"
+              [(ngModel)]="dateTo"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sender Filter -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="User" class="label-icon"></lucide-icon>
+          Sender
+        </label>
+        <input
+          type="text"
+          class="filter-input"
+          placeholder="Filter by sender email..."
+          [(ngModel)]="sender"
+        />
+      </div>
+
+      <!-- Subject Filter -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="FileText" class="label-icon"></lucide-icon>
+          Subject Contains
+        </label>
+        <input
+          type="text"
+          class="filter-input"
+          placeholder="Filter by subject keywords..."
+          [(ngModel)]="subjectContains"
+        />
+      </div>
+
+      <!-- Body Filter -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="FileText" class="label-icon"></lucide-icon>
+          Body Contains
+        </label>
+        <input
+          type="text"
+          class="filter-input"
+          placeholder="Filter by body keywords..."
+          [(ngModel)]="bodyContains"
+        />
+      </div>
+
+      <!-- Priority Filter -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="AlertCircle" class="label-icon"></lucide-icon>
+          Priority
+        </label>
+        <div class="priority-chips">
+          <button
+            *ngFor="let priority of priorities"
+            class="priority-chip"
+            [class.selected]="isPrioritySelected(priority.value)"
+            [style.border-color]="isPrioritySelected(priority.value) ? priority.color : '#ddd'"
+            [style.background]="isPrioritySelected(priority.value) ? priority.color + '20' : 'white'"
+            (click)="togglePriority(priority.value)"
+          >
+            <span
+              class="priority-dot"
+              [style.background]="priority.color"
+            ></span>
+            {{ priority.label }}
+          </button>
+        </div>
+        <p class="filter-hint">Select one or more priorities</p>
+      </div>
+
+      <!-- Attachment Filter -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="Paperclip" class="label-icon"></lucide-icon>
+          Attachments
+        </label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="attachment"
+              value="all"
+              [(ngModel)]="hasAttachment"
+            />
+            <span>All Emails</span>
+          </label>
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="attachment"
+              value="with"
+              [(ngModel)]="hasAttachment"
+            />
+            <span>With Attachments</span>
+          </label>
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="attachment"
+              value="without"
+              [(ngModel)]="hasAttachment"
+            />
+            <span>Without Attachments</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Starred Filter -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <lucide-icon [img]="Star" class="label-icon"></lucide-icon>
+          Starred
+        </label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="starred"
+              value="all"
+              [(ngModel)]="isStarred"
+            />
+            <span>All Emails</span>
+          </label>
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="starred"
+              value="starred"
+              [(ngModel)]="isStarred"
+            />
+            <span>Starred Only</span>
+          </label>
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="starred"
+              value="unstarred"
+              [(ngModel)]="isStarred"
+            />
+            <span>Unstarred Only</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClearFilters()">
+        Clear All
+      </button>
+      <button class="btn btn-primary" (click)="onApplyFilters()">
+        Apply Filters
+      </button>
+    </div>
+  </div>
+</div>

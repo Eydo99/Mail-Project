@@ -1,0 +1,8 @@
+<div class="app-shell">
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+  <!-- Only render reader when an email is selected -->
+  <app-reader *ngIf="isReaderOpen"></app-reader>
+</div>

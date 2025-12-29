@@ -1,0 +1,159 @@
+<div class="inbox-container">
+   <!-- Filter Modal -->
+  <app-filter-modal
+    *ngIf="showFilterModal"
+    [currentFilters]="filterCriteria"
+    (applyFilters)="onApplyFilters($event)"
+    (clearFilters)="clearAllFilters()"
+    (close)="closeFilterModal()"
+  ></app-filter-modal>
+
+  <!-- Action Bar -->
+  <div class="action-bar" *ngIf="showActionBar">
+    <div class="action-bar-content">
+      <div class="action-bar-left">
+        <span class="selection-count">{{ getSelectedCount() }} email{{ getSelectedCount() > 1 ? 's' : '' }} selected</span>
+      </div>
+
+      <div class="action-bar-center">
+        <button class="action-btn delete-btn" (click)="deleteSelectedEmails()">
+          <lucide-icon [img]="Trash2" class="action-icon"></lucide-icon>
+          Delete Permanently
+        </button>
+
+        <select class="folder-dropdown" [(ngModel)]="moveToFolder" (change)="onFolderChange(moveToFolder)">
+          <option value="" disabled selected>Restore to...</option>
+          <option value="inbox">Inbox</option>
+          <option value="sent">Sent</option>
+          <option value="draft">Draft</option>
+          <div *ngFor="let folder of folders">
+            <option [value]="'folder_' + folder.id" >{{folder.name}}</option>
+          </div>
+        </select>
+
+        <button class="action-btn move-btn" (click)="moveSelectedEmails()" [disabled]="!moveToFolder">
+          <lucide-icon [img]="FolderInput" class="action-icon"></lucide-icon>
+          Restore
+        </button>
+      </div>
+
+      <button class="action-bar-close" (click)="closeActionBar()">
+        <lucide-icon [img]="X" class="close-icon"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="inbox-header">
+    <h1 class="inbox-title">
+      {{ title }}
+      <span class="auto-refresh-indicator" *ngIf="isAutoRefreshing">● Auto-updating</span>
+    </h1>
+
+    <div class="inbox-toolbar">
+      <button class="select-all-btn" (click)="toggleSelectAll()">
+        {{ areAllSelected() ? 'Deselect All' : 'Select All' }}
+      </button>
+
+      <input
+        type="text"
+        class="search-bar"
+        placeholder="Search emails..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearch(searchQuery)"
+      />
+
+      <select class="sort-dropdown" (change)="onSortChange($any($event.target).value)">
+        <option value="date-desc">Date (Newest)</option>
+        <option value="date-asc">Date (Oldest)</option>
+        <option value="sender-asc">Sender (A-Z)</option>
+        <option value="sender-desc">Sender (Z-A)</option>
+        <option value="subject-asc">Subject (A-Z)</option>
+        <option value="subject-desc">Subject (Z-A)</option>
+        <option value="priority-asc">Priority (High to Low)</option>
+        <option value="priority-desc">Priority (Low to High)</option>
+      </select>
+
+    <button
+        class="filters-btn"
+        [class.active]="hasActiveFilters"
+        (click)="openFilterModal()"
+      >
+        <lucide-icon [img]="Filter" class="filter-icon"></lucide-icon>
+        <span>Filters</span>
+        <span *ngIf="hasActiveFilters" class="filter-badge">●</span>
+      </button>
+    </div>
+
+    <!-- Active Filters Info -->
+    <div class="active-filters" *ngIf="hasActiveFilters">
+      <span class="filter-info-text">Filters Active</span>
+      <button class="clear-filters-btn" (click)="clearAllFilters()">
+        Clear All Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Email List -->
+  <div class="email-list">
+    <div
+      *ngFor="let email of paginatedEmails"
+      class="email-item"
+      [class.selected]="email.id === selectedEmailId"
+      [class.checkbox-selected]="isEmailSelected(email.id)"
+      (click)="onEmailClick(email)"
+    >
+      <input
+        type="checkbox"
+        class="email-checkbox"
+        [checked]="isEmailSelected(email.id)"
+        (click)="toggleEmailSelection($event, email.id)"
+      />
+
+      <div class="email-content">
+        <div class="email-header">
+          <!-- Priority Circle -->
+          <span
+            class="priority-circle"
+            [style.background-color]="getPriorityColor(email.priority)"
+          ></span>
+          <span class="email-sender">{{ email.sender }}</span>
+
+          <lucide-icon
+            *ngIf="email.hasAttachment"
+            [img]="Paperclip"
+            class="icon attachment-icon"
+          ></lucide-icon>
+
+          <lucide-icon
+            *ngIf="email.priority <= 2"
+            [img]="AlertCircle"
+            class="icon urgent-icon"
+          ></lucide-icon>
+        </div>
+
+        <div class="email-subject">{{ email.subject }}</div>
+        <div class="email-preview">{{ email.preview }}</div>
+      </div>
+
+      <div class="email-time">
+        {{ email.timestamp | date:'shortTime' }}
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="paginatedEmails.length === 0" class="empty-state">
+      <lucide-icon [img]="Trash2" class="empty-icon"></lucide-icon>
+      <p class="empty-message">Trash is empty</p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalItems]="totalItems"
+    [itemsPerPage]="itemsPerPage"
+    (pageChange)="onPageChange($event)"
+    (itemsPerPageChange)="onItemsPerPageChange($event)"
+  ></app-pagination>
+</div>

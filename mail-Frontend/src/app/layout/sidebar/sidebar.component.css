@@ -1,0 +1,787 @@
+/* ----------------------------------
+   SIDEBAR CONTAINER
+---------------------------------- */
+.sidebar {
+  width: 260px;
+  height: 97.5vh;
+  margin: 10px;
+  border-radius: 12px;
+  background: #1B3C53;
+  border: 2px solid #234C6A;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.35s cubic-bezier(.25, .8, .25, 1);
+}
+
+.sidebar *,
+.nav-btn,
+.label,
+.brand-text,
+.brand-avatar {
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.25s ease;
+}
+
+/* collapsed */
+.sidebar.closed {
+  width: 80px;
+}
+
+.sidebar.closed .sidebar-inner {
+  padding: 18px 0;
+  align-items: center;
+}
+
+/* ----------------------------------
+   WRAPPER
+---------------------------------- */
+.sidebar-inner {
+  padding: 18px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------------------
+   BRAND / HEADER - ENHANCED
+---------------------------------- */
+.sidebar-header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* ENHANCED LOGO ICON */
+.brand-avatar {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.brand-avatar svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
+}
+
+/* Collapsed state - center the icon */
+.sidebar.closed .brand {
+  justify-content: center;
+}
+
+.sidebar.closed .brand-avatar {
+  transform: scale(1);
+  margin: 0;
+}
+
+/* Hover effect on logo */
+.brand:hover .brand-avatar {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar.closed .brand-text {
+  opacity: 0;
+  transform: translateX(-12px);
+  pointer-events: none;
+  width: 0;
+}
+
+.brand-title {
+  color: rgba(52, 197, 255, 0.927); /* The main text color */
+  
+  /* Text Stroke (using the box-shadow color for contrast) */
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #3B82F6;
+  text-stroke-width: 0.5px;
+  text-stroke-color: #3B82F6;
+
+  /* Initial subtle glow (using the text-shadow color) */
+  text-shadow: 0 0 5px #78a8dd;
+  
+  /* The box shadow property applies a shadow to the element's box, not the text itself. */
+  /* This creates an outer glow around the entire text block/container. */
+  box-shadow: 0 0 10px #3B82F6; 
+  
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  
+  /* Add a smooth transition for the hover effects */
+  transition: text-shadow 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
+}
+
+
+.brand-title:hover {
+  text-shadow:
+    0 0 10px #78a8dd, /* Brighter glow */
+    0 0 20px #78a8dd;
+    
+  box-shadow:
+    0 0 15px #3B82F6, 
+    0 0 30px #3B82F6;
+
+  -webkit-text-stroke-color: rgba(52, 197, 255, 0.927); 
+  text-stroke-color: rgba(52, 197, 255, 0.927);
+  cursor: pointer; 
+}
+
+
+/* ----------------------------------
+   PROFILE SECTION - NEW
+---------------------------------- */
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.profile-section:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+/* Collapsed state - center profile */
+.sidebar.closed .profile-section {
+  padding: 8px;
+  justify-content: center;
+  background: transparent;
+  margin-bottom: 16px;
+}
+
+.sidebar.closed .profile-section:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: none;
+}
+
+/* Profile Avatar */
+.profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-letter {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* Collapsed state - keep avatar size consistent */
+.sidebar.closed .profile-avatar {
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+}
+
+.sidebar.closed .profile-letter {
+  font-size: 18px;
+}
+
+/* Profile section hover effect on avatar */
+.profile-section:hover .profile-avatar {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Profile Name */
+.profile-name {
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar.closed .profile-name {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+/* ----------------------------------
+   NAVIGATION BUTTONS
+---------------------------------- */
+.nav-list,
+.folder-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+  color: white;
+  width: 100%;
+}
+
+.sidebar.closed .nav-btn {
+  padding: 10px;
+  justify-content: center;
+  width: 56px;
+  margin: 0 auto;
+}
+
+.nav-btn:hover {
+  background: rgba(69, 104, 130, 0.3);
+  transform: translateX(2px);
+}
+
+.sidebar.closed .nav-btn:hover {
+  transform: scale(1.05);
+}
+
+/* active item */
+.nav-btn--active {
+  background: rgba(69, 104, 130, 0.4);
+  border: 2px solid rgba(69, 104, 130, 0.5);
+}
+
+.nav-btn--active::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: #3B82F6;
+  border-radius: 0 4px 4px 0;
+}
+
+.sidebar.closed .nav-btn--active::before {
+  left: -4px;
+  width: 3px;
+}
+
+/* ----------------------------------
+   NAVIGATION ICONS - FIXED
+---------------------------------- */
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon svg,
+lucide-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+.nav-icon img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.nav-btn .nav-icon {
+  color: white;
+  stroke: white;
+}
+
+.nav-btn--active .nav-icon svg,
+.nav-btn--active lucide-icon svg {
+  stroke: #78a8dd;
+  transform: scale(1.1);
+}
+
+.nav-btn:hover .nav-icon svg,
+.nav-btn:hover lucide-icon svg {
+  stroke: #E3E3E3;
+  transform: scale(1.05);
+}
+
+lucide-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar.closed .label {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar:not(.closed) .label,
+.sidebar:not(.closed) .brand-text,
+.sidebar:not(.closed) .profile-name {
+  transition-delay: 0.1s;
+}
+
+.label {
+  font-size: 15px;
+  color: white;
+  white-space: nowrap;
+}
+
+.dispatcher-section {
+  margin: 10px 0;
+}
+
+.dispatcher-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 10px 15px;
+}
+
+.dispatcher-toggle {
+  padding: 12px 20px;
+  margin: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dispatcher-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Enabled state - Green glow */
+.dispatcher-toggle.enabled {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.dispatcher-toggle.enabled:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.sidebar.collapsed .dispatcher-toggle,
+.sidebar.is-collapsed .dispatcher-toggle,
+.sidebar-collapsed .dispatcher-toggle,
+.sidebar.closed .dispatcher-toggle {
+  justify-content: center;
+  padding: 12px;
+  margin: 5px auto;
+  width: 56px;
+  min-width: 56px;
+}
+
+/* Hide content when collapsed, keep icon centered */
+.sidebar.collapsed .dispatcher-content,
+.sidebar.is-collapsed .dispatcher-content,
+.sidebar-collapsed .dispatcher-content,
+.sidebar.closed .dispatcher-content {
+  display: none;
+}
+
+.sidebar.collapsed .dispatcher-hint,
+.sidebar.is-collapsed .dispatcher-hint,
+.sidebar-collapsed .dispatcher-hint,
+.sidebar.closed .dispatcher-hint {
+  display: none;
+}
+.dispatcher-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.dispatcher-toggle:hover .dispatcher-icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+/* Pulsing animation when enabled */
+.dispatcher-toggle.enabled .dispatcher-icon {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+
+.dispatcher-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.dispatcher-label {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex: 1;
+  color: #e1e8ed;
+}
+
+.dispatcher-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  animation: badge-glow 2s ease-in-out infinite;
+}
+
+@keyframes badge-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(245, 158, 11, 0); }
+  50% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.6); }
+}
+
+.dispatcher-status {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.dispatcher-status.active {
+  background: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+
+
+.pulse-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: #f59e0b;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Collapsed state - adjust pulse dot position */
+.sidebar.closed .pulse-dot {
+  top: 4px;
+  right: 4px;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.7;
+  }
+}
+
+
+.dispatcher-hint {
+  padding: 8px 20px;
+  margin: 0 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  line-height: 1.4;
+  transition: opacity 0.2s ease;
+}
+
+
+
+.dispatcher-toggle:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+
+/* ----------------------------------
+   FOLDERS
+---------------------------------- */
+.folders-section {
+  margin-top: 16px;
+}
+
+.folders-label {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+.sidebar.closed .folders-label {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+}
+
+/* Folder badge */
+.folder-badge {
+  margin-left: auto;
+  background: #8B4513;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  min-width: 24px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  right: 8px;
+}
+
+.sidebar.closed .folder-badge {
+  opacity: 0;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Make nav-btn position relative for badge positioning */
+.nav-btn {
+  position: relative;
+}
+
+/* ----------------------------------
+   FOOTER
+---------------------------------- */
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.utility-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+  color: white;
+  width: 100%;
+}
+
+.utility-btn:hover {
+  background: rgba(69, 104, 130, 0.3);
+  transform: translateX(2px);
+}
+
+.sidebar.closed .utility-btn {
+  padding: 10px;
+  justify-content: center;
+  width: 56px;
+  margin: 0 auto;
+}
+
+.sidebar.closed .utility-btn:hover {
+  transform: scale(1.05);
+}
+
+.sidebar.closed .utility-btn .label {
+  display: none;
+}
+
+/* Active state for utility buttons */
+.utility-btn.nav-btn--active {
+  background: rgba(69, 104, 130, 0.4);
+  border: 2px solid rgba(69, 104, 130, 0.5);
+}
+
+/* New message button */
+.new-message-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  color: white;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  width: 100%;
+}
+
+.new-message-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #4F94FF 0%, #3B82F6 100%);
+}
+
+.new-message-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+}
+
+.new-message-btn .compose-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.new-message-btn .compose-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
+}
+
+.new-message-btn .btn-text {
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+/* Collapsed new message button */
+.sidebar.closed .new-message-btn {
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+  justify-content: center;
+  gap: 0;
+  margin: 0 auto;
+}
+
+.sidebar.closed .new-message-btn .btn-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar.closed .new-message-btn .compose-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.sidebar.closed .new-message-btn .compose-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Smooth width transition for collapsible elements */
+.sidebar.closed .label,
+.sidebar.closed .brand-text,
+.sidebar.closed .profile-name,
+.sidebar.closed .folder-badge,
+.sidebar.closed .new-message-btn .btn-text {
+  transition: opacity 0.25s ease, transform 0.25s ease, width 0.25s ease;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .dispatcher-toggle,
+  .dispatcher-icon,
+  .dispatcher-badge,
+  .pulse-dot {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
