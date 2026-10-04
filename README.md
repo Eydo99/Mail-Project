@@ -38,7 +38,7 @@
 15. [Getting Started](#-getting-started)
 16. [Configuration](#-configuration)
 17. [Testing](#-testing)
-18. [Known Limitations & Roadmap](#-known-limitations--roadmap)
+18. [Roadmap](#-roadmap)
 
 ---
 
@@ -1159,44 +1159,6 @@ cd mail-Frontend && npx ng build
 > The filter chain, sort strategies, factories and `ProfileCommandManager` are all pure, dependency-light classes — excellent first targets for unit tests.
 
 ---
-
-## 🧭 Known Limitations & Roadmap
-
-Observations from reading the code, ordered roughly by impact. None of them prevent local use, but they matter before any real deployment.
-
-### Correctness & security
-
-| # | Finding | Suggested fix |
-|---|---|---|
-| 1 | **Shared mutable state in a singleton.** `mailService` has a `senderEmail` field (with a Lombok setter). Several controllers call `mailService.setSenderEmail(user)`, and `getLoggedInUser()` prefers that field over the session — so with concurrent users, one user's value can leak into another's requests. | Remove the field; pass the user (from the session) explicitly or resolve it per request only. |
-| 2 | **No central authentication layer.** Controllers read the session individually; `request.getSession()` (create = true) can yield a `null` user, which then flows into paths such as `data/users/null/…`. | Add a `HandlerInterceptor` / Spring Security filter and reject unauthenticated calls with `401`. |
-| 3 | **Attachment endpoint is unauthenticated** and normalises the path without confirming it stays inside `data/uploads/`. | Check `resolvedPath.startsWith(uploadRoot)`, and authorise by mail ownership. |
-| 4 | **Folder deletion loses mail.** `FolderService.deleteFolder` is documented as "move emails to inbox" but deletes `folder_<id>.json` and the metadata. | Move the mails to the inbox before deleting, or fix the doc. |
-| 5 | **Signup validation is thin** (only the `@gmail.com` suffix). | Add `@Valid` constraints on `SignupRequest` (email format, password strength). |
-| 6 | **JSON error bodies are built by string concatenation**, so quotes in messages break the JSON. | Return a `Map`/record and add a `@ControllerAdvice`. |
-
-### Persistence & concurrency
-
-| # | Finding | Suggested fix |
-|---|---|---|
-| 7 | Whole-file read-modify-write with `synchronized` on **per-instance lock objects** (separate in `mailRepo` and `mailService`) — not per-user/file, and not atomic across classes; a crash mid-write can corrupt a file. | Write to a temp file then atomically move; or adopt a database (JPA + H2/PostgreSQL). |
-| 8 | The repository abstraction is bypassed: `mailService` reads/writes files directly for compose/move/draft; facades use raw `FileWriter`; `"data/users/"` is duplicated in many classes. | Route all I/O through repos/`JsonFileManager`; centralise paths in one config property. |
-| 9 | Multi-recipient send creates a separate mail id and a separate **Sent** copy per recipient. | Create one sent copy with all recipients. |
-| 10 | Mail ids come from a static counter in a text file (not safe across multiple instances). | Use UUIDs or database sequences. |
-
-### Code quality & project hygiene
-
-| # | Finding | Suggested fix |
-|---|---|---|
-| 11 | Naming deviates from Java conventions: classes `mail`, `mailRepo`, `contactRepo`, `attachementService`; packages `Repo`, `DTOS`, `Util`, `Factory`. API field names `piriority` and `attachements` are typos baked into the contract. | Rename (and version the API if clients exist). |
-| 12 | CORS configured in two places with different origin lists; `dev2` (port 4201) is not in the allow-list. | One `CorsConfig` driven by properties. |
-| 13 | `DispatcherSettingsService` hard-codes `http://localhost:8080`, unlike the other services (`environment1`). `angular.json` `development` replaces `environment1` with itself (no-op); files are named `environment1/2` instead of `environment.ts` / `environment.prod.ts`. | Standard environment files + `fileReplacements`. |
-| 14 | `core/utils/*.ts` are empty placeholders; several npm packages (`animejs`, `gsap`, `daisyui`, `flowbite`, `ngx-toastr`, `ngx-pagination`, `@ngneat/tailwind`) have no imports in `src/`. | Delete or implement. |
-| 15 | Repository contains runtime artefacts: `data/uploads/*` (user files), `data/users/*` (hashed credentials), `mail-Frontend/src.zip`. | Add to `.gitignore`; ship a small anonymised seed instead. |
-| 16 | Server-side undo/redo endpoints exist, but `UserProfileController.updateProfile` clears the history right after saving, and the Settings screen uses the client-side `CommandManager`. | Choose one source of truth. |
-| 17 | Dispatcher Mode's AI flags (`autoSummarizeUrgent`, `smartReply`, `priorityScoring`) and timeline/metrics are stored settings only — no implementation was found. | Implement or label as "coming soon". |
-| 18 | `ContactFactory.generateInitials` would throw on a blank name or consecutive spaces. | Filter empty segments. |
-| 19 | Many `System.out.println` debug traces in controllers/services/guard. | Use SLF4J with levels. |
 
 ### Roadmap ideas
 
